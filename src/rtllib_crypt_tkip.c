@@ -115,16 +115,15 @@ static void * rtllib_tkip_init(int key_idx)
 		priv->tx_tfm_arc4 = NULL;
 		goto fail;
 	}
-
-	priv->tx_tfm_michael = crypto_alloc_hash("michael_mic", 0,
-			CRYPTO_ALG_ASYNC);
+/*
+	priv->tx_tfm_michael = crypto_alloc_hash("michael_mic", 0, CRYPTO_ALG_ASYNC);
 	if (IS_ERR(priv->tx_tfm_michael)) {
 		printk(KERN_DEBUG "rtllib_crypt_tkip: could not allocate "
 				"crypto API michael_mic\n");
 		priv->tx_tfm_michael = NULL;
 		goto fail;
 	}
-
+*/
 	priv->rx_tfm_arc4 = crypto_alloc_blkcipher("ecb(arc4)", 0,
 			CRYPTO_ALG_ASYNC);
 	if (IS_ERR(priv->rx_tfm_arc4)) {
@@ -134,14 +133,14 @@ static void * rtllib_tkip_init(int key_idx)
 		goto fail;
 	}
 
-	priv->rx_tfm_michael = crypto_alloc_hash("michael_mic", 0,
+/*	priv->rx_tfm_michael = crypto_alloc_hash("michael_mic", 0,
 			CRYPTO_ALG_ASYNC);
 	if (IS_ERR(priv->rx_tfm_michael)) {
 		printk(KERN_DEBUG "rtllib_crypt_tkip: could not allocate "
 				"crypto API michael_mic\n");
 		priv->rx_tfm_michael = NULL;
 		goto fail;
-	}
+	}*/
 #endif
 	return priv;
 
@@ -158,12 +157,12 @@ fail:
 			crypto_free_tfm(priv->rx_tfm_arc4);
 
 #else
-		if (priv->tx_tfm_michael)
-			crypto_free_hash(priv->tx_tfm_michael);
+/*		if (priv->tx_tfm_michael)
+			crypto_free_hash(priv->tx_tfm_michael);*/
 		if (priv->tx_tfm_arc4)
 			crypto_free_blkcipher(priv->tx_tfm_arc4);
-		if (priv->rx_tfm_michael)
-			crypto_free_hash(priv->rx_tfm_michael);
+		/*if (priv->rx_tfm_michael)
+			crypto_free_hash(priv->rx_tfm_michael);*/
 		if (priv->rx_tfm_arc4)
 			crypto_free_blkcipher(priv->rx_tfm_arc4);
 #endif
@@ -188,12 +187,12 @@ static void rtllib_tkip_deinit(void *priv)
 		crypto_free_tfm(_priv->rx_tfm_arc4);
 #else
 	if (_priv) {
-		if (_priv->tx_tfm_michael)
-			crypto_free_hash(_priv->tx_tfm_michael);
+/*		if (_priv->tx_tfm_michael)
+			crypto_free_hash(_priv->tx_tfm_michael);*/
 		if (_priv->tx_tfm_arc4)
 			crypto_free_blkcipher(_priv->tx_tfm_arc4);
-		if (_priv->rx_tfm_michael)
-			crypto_free_hash(_priv->rx_tfm_michael);
+/*		if (_priv->rx_tfm_michael)
+			crypto_free_hash(_priv->rx_tfm_michael);*/
 		if (_priv->rx_tfm_arc4)
 			crypto_free_blkcipher(_priv->rx_tfm_arc4);
 	}
@@ -647,20 +646,20 @@ static int michael_mic(struct crypto_tfm * tfm_michael, u8 *key, u8 *hdr,
         crypto_digest_final(tfm_michael, mic);
         return 0;
 #else
-if (crypto_hash_setkey(tkey->tfm_michael, key, 8))
+/*if (crypto_hash_setkey(tkey->tfm_michael, key, 8))
                 return -1;
 
               desc.tfm = tkey->tfm_michael;
               desc.flags = 0;
               ret = crypto_hash_digest(&desc, sg, data_len + 16, mic);
-              return ret;
+              return ret;*/
 #endif
 }
 #else
 static int michael_mic(struct crypto_hash *tfm_michael, u8 * key, u8 * hdr,
                        u8 * data, size_t data_len, u8 * mic)
 {
-        struct hash_desc desc;
+//        struct hash_desc desc;
         struct scatterlist sg[2];
 
         if (tfm_michael == NULL) {
@@ -680,13 +679,13 @@ static int michael_mic(struct crypto_hash *tfm_michael, u8 * key, u8 * hdr,
         sg_set_buf(&sg[0], hdr, 16);
         sg_set_buf(&sg[1], data, data_len);
 #endif
-
+/*
         if (crypto_hash_setkey(tfm_michael, key, 8))
                 return -1;
 
         desc.tfm = tfm_michael;
         desc.flags = 0;
-        return crypto_hash_digest(&desc, sg, data_len + 16, mic);
+        return crypto_hash_digest(&desc, sg, data_len + 16, mic);*/
 }
 #endif
 

@@ -2037,7 +2037,8 @@ static short rtllib_sta_ps_sleep(struct rtllib_device *ieee, u32 *time_h, u32 *t
 	if (dtim & (RTLLIB_DTIM_UCAST & ieee->ps))
 		return 2;
 
-	if (!time_after(jiffies, ieee->dev->trans_start + MSECS(timeout))){
+//	if (!time_after(jiffies, ieee->dev->trans_start + MSECS(timeout))){
+	if (!time_after(jiffies, dev_trans_start(ieee->dev) + MSECS(timeout))){
 		return 0;
 	}
 	if (!time_after(jiffies, ieee->last_rx_ps_time + MSECS(timeout))){
